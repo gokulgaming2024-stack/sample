@@ -1,255 +1,277 @@
-# 🌤️ Weather App
+# Testing Practice
 
-A modern weather application built with vanilla JavaScript, Webpack, and the free Open-Meteo API.
+A comprehensive Jest testing project demonstrating TDD (Test-Driven Development) with various utility functions.
 
-## Features
+## Project Setup
 
-✅ **Real-time Weather Data** - Get current weather conditions for any location
-✅ **Location Search** - Search by city name or coordinates (latitude, longitude)
-✅ **Comprehensive Data** - Temperature, humidity, wind speed, pressure, visibility, UV index
-✅ **Beautiful UI** - Modern, responsive design with weather emoji indicators
-✅ **Loading State** - Visual feedback while fetching data
-✅ **Error Handling** - Graceful error messages for invalid locations
-✅ **No API Key Required** - Uses free Open-Meteo API
-✅ **Timezone Support** - Automatically detects and displays local timezone
+This project uses Jest with Babel to support ES6 module syntax (import/export).
+
+### Configuration Files
+
+**package.json**
+- Defines Jest and Babel dependencies
+- Custom test script for ESM support
+
+**jest.config.js**
+- Jest configuration for ES modules
+- Babel transformer setup
+- Test file pattern matching
+
+**.babelrc**
+- Babel configuration for transpiling modern JavaScript
+- Targets Node.js
+
+## Functions Tested
+
+### 1. capitalize(string)
+Capitalizes the first character of a string.
+
+**Tests:**
+- Basic capitalization
+- Already capitalized strings
+- Single characters
+- Empty strings
+- Multiple words
+- Strings starting with numbers
+
+```javascript
+capitalize('hello') // 'Hello'
+capitalize('Hello') // 'Hello'
+capitalize('') // ''
+```
+
+### 2. reverseString(string)
+Returns a string in reverse order.
+
+**Tests:**
+- Basic reversal
+- Single characters
+- Empty strings
+- Strings with spaces
+- Special characters
+- Palindromes
+- Numbers in strings
+
+```javascript
+reverseString('hello') // 'olleh'
+reverseString('Hello, World!') // '!dlroW ,olleH'
+reverseString('racecar') // 'racecar'
+```
+
+### 3. calculator
+An object with basic arithmetic operations.
+
+**Methods:**
+- `add(a, b)` - Addition
+- `subtract(a, b)` - Subtraction
+- `multiply(a, b)` - Multiplication
+- `divide(a, b)` - Division
+
+**Tests per operation:**
+- Positive numbers
+- Negative numbers
+- Zero
+- Decimals
+- Division by zero (returns Infinity)
+
+```javascript
+calculator.add(2, 3) // 5
+calculator.subtract(5, 3) // 2
+calculator.multiply(3, 4) // 12
+calculator.divide(10, 2) // 5
+```
+
+### 4. caesarCipher(string, shift)
+Implements the Caesar cipher encryption algorithm.
+
+**Features:**
+- Wraps from z to a (and Z to A)
+- Preserves case (uppercase stays uppercase, lowercase stays lowercase)
+- Preserves punctuation, spaces, and numbers
+- Handles negative shifts
+- Handles shifts larger than 26
+
+**Tests:**
+- Basic shifting
+- Wrapping (xyz + 3 = abc)
+- Case preservation (lowercase, uppercase, mixed)
+- Punctuation preservation
+- Spaces and special characters
+- Zero shift
+- Large shifts
+- Negative shifts
+- Empty strings
+- Complex examples
+
+```javascript
+caesarCipher('hello', 3) // 'khoor'
+caesarCipher('HeLLo', 3) // 'KhOOr'
+caesarCipher('Hello, World!', 3) // 'Khoor, Zruog!'
+caesarCipher('xyz', 3) // 'abc'
+```
+
+### 5. analyzeArray(array)
+Analyzes an array of numbers and returns statistics.
+
+**Returns object with:**
+- `average` - Mean of all numbers
+- `min` - Minimum value
+- `max` - Maximum value
+- `length` - Number of elements
+
+**Tests:**
+- Basic analysis
+- Single element arrays
+- Negative numbers
+- Mixed positive/negative
+- Decimal numbers
+- Duplicates
+- Unsorted arrays
+
+```javascript
+analyzeArray([1, 8, 3, 4, 2, 6])
+// {
+//   average: 4,
+//   min: 1,
+//   max: 8,
+//   length: 6
+// }
+```
+
+## Running Tests
+
+### Run all tests once:
+```bash
+npm test
+```
+
+### Run tests in watch mode:
+```bash
+npm run test:watch
+```
+
+### Expected Output
+All 60+ tests should pass:
+```
+PASS  __tests__/capitalize.test.js
+PASS  __tests__/reverseString.test.js
+PASS  __tests__/calculator.test.js
+PASS  __tests__/caesarCipher.test.js
+PASS  __tests__/analyzeArray.test.js
+
+Tests:       60+ passed
+Time:        ~1-2 seconds
+```
 
 ## Project Structure
 
 ```
-weather-app/
+testing-practice/
 ├── src/
-│   ├── index.js           # Main entry point
-│   ├── template.html      # HTML structure
-│   ├── styles.css         # All styles
-│   ├── weather-api.js     # API integration
-│   └── ui.js              # DOM management (IIFE)
-├── webpack.config.js      # Webpack configuration
+│   ├── capitalize.js       # Capitalize implementation
+│   ├── reverseString.js    # Reverse string implementation
+│   ├── calculator.js       # Calculator object
+│   ├── caesarCipher.js     # Caesar cipher with helper
+│   └── analyzeArray.js     # Array analysis function
+├── __tests__/
+│   ├── capitalize.test.js  # Capitalize tests
+│   ├── reverseString.test.js # Reverse string tests
+│   ├── calculator.test.js  # Calculator tests
+│   ├── caesarCipher.test.js # Caesar cipher tests
+│   └── analyzeArray.test.js # Array analysis tests
+├── jest.config.js          # Jest configuration
+├── .babelrc               # Babel configuration
 ├── package.json           # Dependencies and scripts
-└── .gitignore            # Git ignore rules
+├── .gitignore            # Git ignore rules
+└── README.md             # This file
 ```
 
-## Getting Started
+## Key Concepts Demonstrated
 
-### Prerequisites
+### 1. Test-Driven Development (TDD)
+- Tests written before implementation
+- Implementation done to make tests pass
+- Red-Green-Refactor cycle
 
-Node.js and npm must be installed. Download from [nodejs.org](https://nodejs.org/)
+### 2. Jest Testing Framework
+- Describe/test blocks for organization
+- Assertions and expectations
+- Test suites for related tests
+- Comprehensive coverage of edge cases
 
-### Installation
+### 3. ES6 Modules
+- Import/export statements
+- Babel transpilation for Jest
+- ESM support in Node.js
 
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+### 4. Unit Testing Best Practices
+- One concept per test
+- Descriptive test names
+- Edge case coverage
+- Clear arrange-act-assert pattern
+- Independent tests (no dependencies)
 
-2. **Run development server:**
-   ```bash
-   npm run serve
-   ```
-   Open [http://localhost:8080](http://localhost:8080/) in your browser.
+### 5. Algorithm Implementation
+- String manipulation
+- Mathematical operations
+- Character encoding/decoding
+- Array processing
+- Helper functions (internal)
 
-3. **Build for production:**
-   ```bash
-   npm run build
-   ```
+## Edge Cases Covered
 
-## Usage
+**Capitalize:**
+- Empty strings
+- Single characters
+- Already capitalized
 
-### Search for Weather
+**Reverse String:**
+- Palindromes
+- Special characters
+- Multiple spaces
 
-1. **By City Name:**
-   - Type a city name (e.g., "London", "New York", "Tokyo")
-   - Click "Search"
+**Calculator:**
+- Division by zero
+- Negative numbers
+- Decimal arithmetic
 
-2. **By Coordinates:**
-   - Enter latitude and longitude separated by comma (e.g., "40.7128,-74.0060")
-   - Click "Search"
+**Caesar Cipher:**
+- Wrapping from z to a
+- Case preservation
+- Non-alphabetical characters
+- Large shift values
+- Negative shifts
 
-### View Weather Information
-
-Once you search, the app displays:
-- **Current Temperature** - Large, easy-to-read display
-- **Weather Condition** - Descriptive text with emoji
-- **Feels Like Temperature** - Perceived temperature
-- **Humidity** - Percentage moisture in air
-- **Wind Speed** - In km/h
-- **Pressure** - Atmospheric pressure in hPa
-- **Visibility** - In kilometers
-- **UV Index** - Sun exposure indicator
-- **Sunrise/Sunset** - Local times
-- **Timezone** - Location's timezone
-
-## API Details
-
-### Open-Meteo API
-
-**Endpoints Used:**
-1. **Geocoding API** - Converts location names to coordinates
-   - Endpoint: `https://geocoding-api.open-meteo.com/v1/search`
-   - Returns: Latitude, longitude, city name, country
-
-2. **Weather Forecast API** - Gets current weather data
-   - Endpoint: `https://api.open-meteo.com/v1/forecast`
-   - Returns: Temperature, humidity, weather codes, wind speed, pressure, visibility, UV index
-
-### Data Processing
-
-The `weather-api.js` module:
-1. **Geocodes** location input (handles both city names and coordinates)
-2. **Fetches** real-time weather data
-3. **Processes** raw API data into user-friendly format
-4. **Interprets** weather codes into readable descriptions
-5. **Returns** clean object with all necessary data
-
-### Weather Codes
-
-Uses WMO Weather Interpretation Codes:
-- `0` - Clear sky
-- `1-3` - Cloudy conditions
-- `45, 48` - Foggy
-- `51-67` - Precipitation
-- `71-86` - Snow
-- `95-99` - Thunderstorms
-
-## Technical Implementation
-
-### Modular Architecture
-
-**UI Module (IIFE)**
-- Handles all DOM manipulation
-- Manages loading/error states
-- Displays weather data
-- Encapsulates all UI logic
-
-**Weather API Module**
-- Separates API calls from UI
-- Handles errors gracefully
-- Processes raw API responses
-- Returns clean data objects
-
-**Main Index File**
-- Orchestrates module initialization
-- Connects form submission to API calls
-- Handles async operations
-
-### Error Handling
-
-- **Invalid Location** - Shows user-friendly error message
-- **Network Errors** - Caught and displayed
-- **Missing Data** - Graceful fallbacks provided
-- **Invalid Coordinates** - Validated with regex
-
-### Loading States
-
-- Spinner animation while fetching
-- "Fetching weather data..." message
-- Prevents duplicate submissions
-- Smooth transitions between states
-
-## Browser DevTools Tips
-
-### Inspect localStorage
-Open DevTools (F12) → Application → Local Storage
-
-### Simulate Network Speed
-1. Open DevTools
-2. Go to Network tab
-3. Click the speed dropdown (top left)
-4. Select "Slow 3G" or "Fast 3G" to simulate slowness
-
-### View Console Logs
-1. Open DevTools (F12)
-2. Go to Console tab
-3. Search for weather data being logged
-
-## Deployment to GitHub Pages
-
-1. **Create deployment branch (first time only):**
-   ```bash
-   git branch gh-pages
-   ```
-
-2. **Commit changes:**
-   ```bash
-   git add .
-   git commit -m "Your message"
-   ```
-
-3. **Deploy:**
-   ```bash
-   git checkout gh-pages
-   git merge main --no-edit
-   npm run build
-   git add dist -f
-   git commit -m "Deployment commit"
-   git subtree push --prefix dist origin gh-pages
-   git checkout main
-   ```
-
-4. **Enable GitHub Pages:**
-   - Go to repository settings
-   - Set source to `gh-pages` branch
-
-## Supported Locations
-
-The app works with any city that exists in the geocoding database:
-- **Cities**: London, Paris, Tokyo, Sydney
-- **Towns**: Any named municipality
-- **Coordinates**: Latitude and longitude pairs
-- **Countries**: Most world locations supported
-
-## Example Searches
-
-```
-London
-New York
-40.7128,-74.0060 (New York coordinates)
-Paris
-Tokyo
-Sydney
-Los Angeles
-```
+**Analyze Array:**
+- Single element
+- Negative numbers
+- Duplicates
+- Decimal precision
 
 ## Troubleshooting
 
-### "Location not found"
-- Check spelling of city name
-- Try using coordinates instead
-- Ensure proper formatting: `latitude,longitude`
+### "Cannot find module" error
+- Ensure files are in correct directories
+- Check import paths use `.js` extension or relative paths correctly
 
-### No data displaying
-- Check browser console (F12) for errors
-- Verify internet connection
-- Try a different location
-- Clear browser cache
+### Tests not running
+- Ensure Node.js is installed
+- Run `npm install` first
+- Check Node.js version supports ESM
 
-### Slow loading
-- Use DevTools Network tab to check API response time
-- Open-Meteo API is free and may be slower during peak times
-- Try again in a few moments
+### Babel errors
+- Verify `.babelrc` file exists
+- Check `@babel/preset-env` is installed
+- Restart test runner after npm install
 
-## Dependencies
+## References
 
-- **webpack** - Module bundler
-- **webpack-cli** - CLI for webpack
-- **webpack-dev-server** - Development server
-- **html-webpack-plugin** - HTML generation
-- **style-loader & css-loader** - CSS bundling
+- [Jest Documentation](https://jestjs.io/)
+- [Babel Documentation](https://babeljs.io/)
+- [Caesar Cipher Algorithm](https://crypto.interactive-maths.com/caesar-shift-cipher.html)
+- [MDN: Array Methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
+- [MDN: String Methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 ## License
 
 This project is open source and available under the MIT License.
-
-## Attribution
-
-Weather data provided by [Open-Meteo](https://open-meteo.com/) - Free weather API with no authentication required.
-
-## Future Enhancements
-
-- 5-day weather forecast
-- Historical weather data
-- Weather alerts
-- Saved favorite locations
-- Dark mode
-- Multiple language support
-- Weather comparison between cities
-- Air quality data
