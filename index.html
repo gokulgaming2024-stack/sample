@@ -3,49 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library</title>
+    <title>Tic Tac Toe</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>My Library</h1>
-            <button id="newBookBtn" class="btn btn-primary">+ New Book</button>
+            <h1>Tic Tac Toe</h1>
         </header>
 
         <main>
-            <div id="libraryDisplay" class="library-grid"></div>
+            <!-- Game Setup Section -->
+            <section id="setupSection" class="setup-section">
+                <div class="form-group">
+                    <label for="player1Name">Player 1 (X):</label>
+                    <input type="text" id="player1Name" placeholder="Enter name" value="Player 1">
+                </div>
+                <div class="form-group">
+                    <label for="player2Name">Player 2 (O):</label>
+                    <input type="text" id="player2Name" placeholder="Enter name" value="Player 2">
+                </div>
+                <button id="startBtn" class="btn btn-primary">Start Game</button>
+            </section>
+
+            <!-- Game Section -->
+            <section id="gameSection" class="game-section hidden">
+                <div class="game-info">
+                    <div id="currentPlayer" class="current-player"></div>
+                    <button id="restartBtn" class="btn btn-secondary">Restart Game</button>
+                </div>
+
+                <div class="board" id="gameBoard">
+                    <div class="square" data-index="0"></div>
+                    <div class="square" data-index="1"></div>
+                    <div class="square" data-index="2"></div>
+                    <div class="square" data-index="3"></div>
+                    <div class="square" data-index="4"></div>
+                    <div class="square" data-index="5"></div>
+                    <div class="square" data-index="6"></div>
+                    <div class="square" data-index="7"></div>
+                    <div class="square" data-index="8"></div>
+                </div>
+
+                <div id="gameResult" class="game-result hidden">
+                    <h2 id="resultMessage"></h2>
+                    <button id="playAgainBtn" class="btn btn-primary">Play Again</button>
+                </div>
+            </section>
         </main>
     </div>
-
-    <!-- Add Book Dialog -->
-    <dialog id="addBookDialog" class="dialog">
-        <div class="dialog-content">
-            <h2>Add New Book</h2>
-            <form id="bookForm">
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" id="title" name="title" required>
-                </div>
-                <div class="form-group">
-                    <label for="author">Author</label>
-                    <input type="text" id="author" name="author" required>
-                </div>
-                <div class="form-group">
-                    <label for="pages">Number of Pages</label>
-                    <input type="number" id="pages" name="pages" required min="1">
-                </div>
-                <div class="form-group checkbox">
-                    <input type="checkbox" id="read" name="read">
-                    <label for="read">I have read this book</label>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Add Book</button>
-                    <button type="button" id="closeDialog" class="btn btn-secondary">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </dialog>
 
     <script src="script.js"></script>
 </body>

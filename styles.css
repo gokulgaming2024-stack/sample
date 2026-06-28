@@ -8,37 +8,78 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 20px;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 100%;
+    padding: 40px;
 }
 
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    text-align: center;
     margin-bottom: 40px;
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 20px 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
-    font-size: 32px;
+    font-size: 48px;
     color: #333;
+    margin-bottom: 10px;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Setup Section */
+.setup-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #333;
+    font-size: 16px;
+}
+
+.form-group input {
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
+    padding: 12px 24px;
     font-size: 16px;
-    cursor: pointer;
     font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
     transition: all 0.3s ease;
 }
 
@@ -50,236 +91,153 @@ header h1 {
 .btn-primary:hover {
     background-color: #5568d3;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .btn-secondary {
-    background-color: #e0e0e0;
+    background-color: #f0f0f0;
     color: #333;
 }
 
 .btn-secondary:hover {
-    background-color: #d0d0d0;
+    background-color: #e0e0e0;
 }
 
-.btn-danger {
-    background-color: #ef5350;
-    color: white;
-    padding: 8px 16px;
-    font-size: 14px;
+/* Game Section */
+.game-section {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
 
-.btn-danger:hover {
-    background-color: #d32f2f;
+.game-section.hidden {
+    display: none;
 }
 
-.btn-toggle {
-    background-color: #66bb6a;
-    color: white;
-    padding: 8px 16px;
-    font-size: 14px;
-}
-
-.btn-toggle:hover {
-    background-color: #43a047;
-}
-
-.btn-toggle.unread {
-    background-color: #ffa726;
-}
-
-.btn-toggle.unread:hover {
-    background-color: #fb8c00;
-}
-
-main {
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    min-height: 400px;
-}
-
-.library-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+.game-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 20px;
 }
 
-.book-card {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    transition: all 0.3s ease;
-}
-
-.book-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-}
-
-.book-card h3 {
-    color: #333;
+.current-player {
     font-size: 20px;
-    margin: 0;
-    word-break: break-word;
-}
-
-.book-info {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    font-weight: 600;
+    color: #333;
     flex-grow: 1;
 }
 
-.book-info p {
-    color: #555;
-    margin: 0;
-    font-size: 14px;
+.current-player.x {
+    color: #667eea;
 }
 
-.book-info strong {
-    color: #333;
+.current-player.o {
+    color: #ef5350;
 }
 
-.read-status {
-    padding: 8px 12px;
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    font-size: 13px;
-    color: #333;
-    font-weight: 600;
-}
-
-.read-status.read {
-    background-color: rgba(102, 187, 106, 0.2);
-    color: #2e7d32;
-}
-
-.read-status.unread {
-    background-color: rgba(255, 152, 0, 0.2);
-    color: #e65100;
-}
-
-.book-actions {
-    display: flex;
+/* Game Board */
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
-}
-
-.book-actions button {
-    flex: 1;
-}
-
-/* Dialog Styles */
-.dialog {
-    border: none;
+    padding: 20px;
+    background-color: #f5f5f5;
     border-radius: 8px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-.dialog::backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(2px);
+.square {
+    aspect-ratio: 1;
+    background-color: white;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
 }
 
-.dialog-content {
+.square:hover {
+    background-color: #f9f9f9;
+    border-color: #667eea;
+}
+
+.square.x {
+    color: #667eea;
+}
+
+.square.o {
+    color: #ef5350;
+}
+
+.square:disabled,
+.square.disabled {
+    cursor: not-allowed;
+}
+
+.square.disabled:hover {
+    background-color: white;
+    border-color: #ddd;
+}
+
+/* Game Result */
+.game-result {
+    background-color: #f0f4ff;
     padding: 30px;
-    max-width: 500px;
+    border-radius: 8px;
+    text-align: center;
+    border: 2px solid #667eea;
 }
 
-.dialog-content h2 {
+.game-result.hidden {
+    display: none;
+}
+
+.game-result h2 {
     color: #333;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     font-size: 24px;
 }
 
-.form-group {
-    margin-bottom: 20px;
+.game-result.winner {
+    background-color: #e8f5e9;
+    border-color: #66bb6a;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: #333;
-    font-weight: 600;
-    font-size: 14px;
+.game-result.tie {
+    background-color: #fff3e0;
+    border-color: #ffa726;
 }
 
-.form-group input[type="text"],
-.form-group input[type="number"] {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #e0e0e0;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: border-color 0.3s ease;
-}
-
-.form-group input[type="text"]:focus,
-.form-group input[type="number"]:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.form-group.checkbox {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 25px;
-}
-
-.form-group.checkbox input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-}
-
-.form-group.checkbox label {
-    margin: 0;
-    cursor: pointer;
-}
-
-.form-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.form-actions button {
-    flex: 1;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: #999;
-}
-
-.empty-state h2 {
-    margin-bottom: 10px;
-    color: #666;
-}
-
-@media (max-width: 768px) {
-    header {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
+/* Responsive */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
     }
 
     header h1 {
-        font-size: 24px;
+        font-size: 36px;
     }
 
-    .library-grid {
-        grid-template-columns: 1fr;
+    .board {
+        gap: 8px;
+        padding: 15px;
     }
 
-    .dialog-content {
-        padding: 20px;
+    .square {
+        font-size: 28px;
+    }
+
+    .game-info {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #restartBtn {
+        width: 100%;
     }
 }

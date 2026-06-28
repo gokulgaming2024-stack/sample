@@ -1,158 +1,270 @@
-// ===== Book Constructor =====
-function Book(title, author, pages, read = false) {
-    this.id = crypto.randomUUID();
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
-}
+// ===== PLAYER FACTORY =====
+const PlayerFactory = (() => {
+    return (name, marker) => {
+        return {
+            name,
+            marker,
+            getMarker() {
+                return this.marker;
+            },
+            getName() {
+                return this.name;
+            }
+        };
+    };
+})();
 
-// Add a prototype method to toggle read status
-Book.prototype.toggleRead = function() {
-    this.read = !this.read;
-};
+// ===== GAMEBOARD MODULE (IIFE) =====
+const Gameboard = (() => {
+    let board = [];
 
-// ===== Library Storage =====
-const myLibrary = [];
+    const initBoard = () => {
+        board = Array(9).fill(null);
+    };
 
-// ===== Add Book to Library =====
-function addBookToLibrary(title, author, pages, read) {
-    const newBook = new Book(title, author, pages, read);
-    myLibrary.push(newBook);
-    displayBooks();
-}
+    const getBoard = () => [...board];
 
-// ===== Display Books on Page =====
-function displayBooks() {
-    const libraryDisplay = document.getElementById('libraryDisplay');
-    libraryDisplay.innerHTML = '';
+    const setMarker = (index, marker) => {
+        if (board[index] === null) {
+            board[index] = marker;
+            return true;
+        }
+        return false;
+    };
 
-    if (myLibrary.length === 0) {
-        libraryDisplay.innerHTML = `
-            <div class="empty-state" style="grid-column: 1 / -1;">
-                <h2>Your library is empty</h2>
-                <p>Click "New Book" to add your first book!</p>
-            </div>
-        `;
-        return;
-    }
+    const getCell = (index) => board[index];
 
-    myLibrary.forEach(book => {
-        const bookCard = createBookCard(book);
-        libraryDisplay.appendChild(bookCard);
+    const isBoardFull = () => board.every(cell => cell !== null);
+
+    const reset = () => {
+        initBoard();
+    };
+
+    const checkWinner = (marker) => {
+        const winPatterns = [
+            // Rows
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            // Columns
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            // Diagonals
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        return winPatterns.some(pattern =>
+            pattern.every(index => board[index] === marker)
+        );
+    };
+
+    const isGameOver = () => {
+        const xWins = checkWinner('X');
+        const oWins = checkWinner('O');
+        const isFull = isBoardFull();
+
+        if (xWins) return { over: true, winner: 'X' };
+        if (oWins) return { over: true, winner: 'O' };
+        if (isFull) return { over: true, winner: null };
+        return { over: false, winner: null };
+    };
+
+    return {
+        initBoard,
+        getBoard,
+        setMarker,
+        getCell,
+        isBoardFull,
+        reset,
+        checkWinner,
+        isGameOver
+    };
+})();
+
+// ===== GAME CONTROLLER MODULE (IIFE) =====
+const GameController = (() => {
+    let player1;
+    let player2;
+    let currentPlayer;
+    let gameOver;
+
+    const initGame = (name1, name2) => {
+        player1 = PlayerFactory(name1, 'X');
+        player2 = PlayerFactory(name2, 'O');
+        currentPlayer = player1;
+        gameOver = false;
+        Gameboard.initBoard();
+    };
+
+    const getCurrentPlayer = () => currentPlayer;
+
+    const playMove = (index) => {
+        if (gameOver) return false;
+
+        const marker = currentPlayer.getMarker();
+        const moveValid = Gameboard.setMarker(index, marker);
+
+        if (!moveValid) return false;
+
+        // Check game status
+        const status = Gameboard.isGameOver();
+        if (status.over) {
+            gameOver = true;
+            return { success: true, gameOver: true, winner: status.winner };
+        }
+
+        // Switch player
+        currentPlayer = currentPlayer === player1 ? player2 : player1;
+        return { success: true, gameOver: false };
+    };
+
+    const getGameStatus = () => {
+        return Gameboard.isGameOver();
+    };
+
+    const isGameOver = () => gameOver;
+
+    const getPlayers = () => ({
+        player1: player1.getName(),
+        player2: player2.getName()
     });
-}
 
-// ===== Create Book Card Element =====
-function createBookCard(book) {
-    const card = document.createElement('div');
-    card.className = 'book-card';
-    card.dataset.bookId = book.id;
+    const resetGame = () => {
+        gameOver = false;
+        currentPlayer = player1;
+        Gameboard.reset();
+    };
 
-    const readStatusClass = book.read ? 'read' : 'unread';
-    const readStatusText = book.read ? 'Read' : 'Not Read';
-    const toggleButtonText = book.read ? 'Mark as Unread' : 'Mark as Read';
-    const toggleButtonClass = book.read ? 'btn-toggle' : 'btn-toggle unread';
+    return {
+        initGame,
+        getCurrentPlayer,
+        playMove,
+        getGameStatus,
+        isGameOver,
+        getPlayers,
+        resetGame
+    };
+})();
 
-    card.innerHTML = `
-        <h3>${escapeHtml(book.title)}</h3>
-        <div class="book-info">
-            <p><strong>Author:</strong> ${escapeHtml(book.author)}</p>
-            <p><strong>Pages:</strong> ${book.pages}</p>
-            <div class="read-status ${readStatusClass}">${readStatusText}</div>
-        </div>
-        <div class="book-actions">
-            <button class="btn ${toggleButtonClass}" data-action="toggle" data-book-id="${book.id}">
-                ${toggleButtonText}
-            </button>
-            <button class="btn btn-danger" data-action="remove" data-book-id="${book.id}">
-                Remove
-            </button>
-        </div>
-    `;
+// ===== DISPLAY CONTROLLER MODULE (IIFE) =====
+const DisplayController = (() => {
+    const setupSection = document.getElementById('setupSection');
+    const gameSection = document.getElementById('gameSection');
+    const gameBoard = document.getElementById('gameBoard');
+    const currentPlayerDisplay = document.getElementById('currentPlayer');
+    const gameResultDiv = document.getElementById('gameResult');
+    const resultMessage = document.getElementById('resultMessage');
+    const startBtn = document.getElementById('startBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const playAgainBtn = document.getElementById('playAgainBtn');
+    const player1Input = document.getElementById('player1Name');
+    const player2Input = document.getElementById('player2Name');
 
-    // Add event listeners to action buttons
-    card.querySelectorAll('button[data-action]').forEach(btn => {
-        btn.addEventListener('click', handleBookAction);
-    });
+    const hideSetup = () => setupSection.classList.add('hidden');
+    const showSetup = () => setupSection.classList.remove('hidden');
+    const hideGame = () => gameSection.classList.add('hidden');
+    const showGame = () => gameSection.classList.remove('hidden');
 
-    return card;
-}
+    const renderBoard = () => {
+        const board = Gameboard.getBoard();
+        const squares = gameBoard.querySelectorAll('.square');
 
-// ===== Handle Book Actions =====
-function handleBookAction(e) {
-    const action = e.target.dataset.action;
-    const bookId = e.target.dataset.bookId;
+        squares.forEach((square, index) => {
+            square.textContent = board[index] || '';
+            square.classList.remove('x', 'o', 'disabled');
+            if (board[index]) {
+                square.classList.add(board[index].toLowerCase());
+                square.classList.add('disabled');
+            }
+        });
+    };
 
-    if (action === 'remove') {
-        removeBook(bookId);
-    } else if (action === 'toggle') {
-        toggleReadStatus(bookId);
-    }
-}
+    const updateCurrentPlayerDisplay = () => {
+        const player = GameController.getCurrentPlayer();
+        currentPlayerDisplay.textContent = `${player.getName()}'s Turn (${player.getMarker()})`;
+        currentPlayerDisplay.classList.remove('x', 'o');
+        currentPlayerDisplay.classList.add(player.getMarker().toLowerCase());
+    };
 
-// ===== Remove Book from Library =====
-function removeBook(bookId) {
-    const bookIndex = myLibrary.findIndex(book => book.id === bookId);
-    if (bookIndex > -1) {
-        myLibrary.splice(bookIndex, 1);
-        displayBooks();
-    }
-}
+    const showGameOver = (winner) => {
+        gameResultDiv.classList.remove('hidden', 'winner', 'tie');
 
-// ===== Toggle Read Status =====
-function toggleReadStatus(bookId) {
-    const book = myLibrary.find(book => book.id === bookId);
-    if (book) {
-        book.toggleRead();
-        displayBooks();
-    }
-}
+        if (winner) {
+            const players = GameController.getPlayers();
+            const winnerName = winner === 'X' ? players.player1 : players.player2;
+            resultMessage.textContent = `🎉 ${winnerName} Wins! 🎉`;
+            gameResultDiv.classList.add('winner');
+        } else {
+            resultMessage.textContent = "It's a Tie!";
+            gameResultDiv.classList.add('tie');
+        }
+    };
 
-// ===== Utility: Escape HTML to prevent XSS =====
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
+    const hideGameOver = () => {
+        gameResultDiv.classList.add('hidden');
+    };
 
-// ===== Dialog and Form Handling =====
-const newBookBtn = document.getElementById('newBookBtn');
-const addBookDialog = document.getElementById('addBookDialog');
-const bookForm = document.getElementById('bookForm');
-const closeDialogBtn = document.getElementById('closeDialog');
+    const handleSquareClick = (e) => {
+        const square = e.target;
+        if (!square.classList.contains('square')) return;
 
-newBookBtn.addEventListener('click', () => {
-    bookForm.reset();
-    addBookDialog.showModal();
-});
+        const index = parseInt(square.dataset.index);
+        const result = GameController.playMove(index);
 
-closeDialogBtn.addEventListener('click', () => {
-    addBookDialog.close();
-});
+        if (!result.success) return;
 
-bookForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+        renderBoard();
 
-    const title = document.getElementById('title').value;
-    const author = document.getElementById('author').value;
-    const pages = parseInt(document.getElementById('pages').value);
-    const read = document.getElementById('read').checked;
+        if (result.gameOver) {
+            showGameOver(result.winner);
+        } else {
+            updateCurrentPlayerDisplay();
+        }
+    };
 
-    addBookToLibrary(title, author, pages, read);
-    addBookDialog.close();
-    bookForm.reset();
-});
+    const attachEventListeners = () => {
+        startBtn.addEventListener('click', () => {
+            const name1 = player1Input.value || 'Player 1';
+            const name2 = player2Input.value || 'Player 2';
 
-// Close dialog when clicking backdrop
-addBookDialog.addEventListener('click', (e) => {
-    if (e.target === addBookDialog) {
-        addBookDialog.close();
-    }
-});
+            GameController.initGame(name1, name2);
+            hideSetup();
+            showGame();
+            hideGameOver();
+            renderBoard();
+            updateCurrentPlayerDisplay();
+        });
 
-// ===== Initialize Library with Sample Books =====
-addBookToLibrary('The Great Gatsby', 'F. Scott Fitzgerald', 180, true);
-addBookToLibrary('To Kill a Mockingbird', 'Harper Lee', 281, true);
-addBookToLibrary('1984', 'George Orwell', 328, false);
-addBookToLibrary('Pride and Prejudice', 'Jane Austen', 279, true);
+        restartBtn.addEventListener('click', () => {
+            GameController.resetGame();
+            hideGameOver();
+            renderBoard();
+            updateCurrentPlayerDisplay();
+        });
+
+        playAgainBtn.addEventListener('click', () => {
+            GameController.resetGame();
+            hideGameOver();
+            renderBoard();
+            updateCurrentPlayerDisplay();
+        });
+
+        gameBoard.addEventListener('click', handleSquareClick);
+    };
+
+    return {
+        attachEventListeners,
+        renderBoard,
+        updateCurrentPlayerDisplay,
+        showGameOver,
+        hideSetup,
+        showSetup,
+        hideGame,
+        showGame
+    };
+})();
+
+// ===== INITIALIZATION =====
+DisplayController.attachEventListeners();
