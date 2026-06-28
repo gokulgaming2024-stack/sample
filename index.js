@@ -1,17 +1,30 @@
 import './styles.css';
-import { loadHome } from './home';
-import { loadMenu } from './menu';
-import { loadContact } from './contact';
+import { getWeather } from './weather-api';
+import UI from './ui';
 
-// Test that webpack is working
-console.log('🍽️ Restaurant page loaded! Webpack is working!');
+console.log('🌤️ Weather App loaded!');
 
-// Load home page on initial page load
 document.addEventListener('DOMContentLoaded', () => {
-    loadHome();
+    UI.init();
 
-    // Set up event listeners for navigation buttons
-    document.getElementById('homeBtn').addEventListener('click', loadHome);
-    document.getElementById('menuBtn').addEventListener('click', loadMenu);
-    document.getElementById('contactBtn').addEventListener('click', loadContact);
+    // Set up form handler
+    UI.getFormHandler()((location) => {
+        const searchWeather = async () => {
+            try {
+                UI.showLoading();
+                console.log(`Searching for weather in: ${location}`);
+                
+                // Simulate network delay for demonstration
+                const weatherData = await getWeather(location);
+                
+                console.log('Weather data retrieved:', weatherData);
+                UI.displayWeather(weatherData);
+            } catch (err) {
+                console.error('Error fetching weather:', err);
+                UI.showError(err.message || 'Failed to fetch weather data. Please try again.');
+            }
+        };
+
+        searchWeather();
+    });
 });
