@@ -3,137 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Library</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="branding">
-                <h1>Dashboard</h1>
-            </div>
-            <nav class="navigation">
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Profile</a></li>
-                    <li><a href="#">Messages</a></li>
-                    <li><a href="#">History</a></li>
-                    <li><a href="#">Tasks</a></li>
-                    <li><a href="#">Communities</a></li>
-                </ul>
-            </nav>
-            <div class="secondary-nav">
-                <h3>Settings</h3>
-                <ul>
-                    <li><a href="#">Settings</a></li>
-                    <li><a href="#">Support</a></li>
-                    <li><a href="#">Privacy</a></li>
-                </ul>
-            </div>
-        </aside>
+        <header>
+            <h1>My Library</h1>
+            <button id="newBookBtn" class="btn btn-primary">+ New Book</button>
+        </header>
 
-        <!-- Main Content Area -->
-        <div class="main">
-            <!-- Header -->
-            <header class="header">
-                <div class="search-bar">
-                    <input type="search" placeholder="Search...">
-                </div>
-                <div class="user-info">
-                    <div class="notifications">🔔</div>
-                    <div class="user-profile">👤 Welcome, User</div>
-                </div>
-            </header>
-
-            <!-- Main Content -->
-            <main class="content">
-                <!-- Projects Section -->
-                <section class="projects">
-                    <h2>Your Projects</h2>
-                    <div class="projects-grid">
-                        <article class="project-card">
-                            <h3>Project One</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        </article>
-                        <article class="project-card">
-                            <h3>Project Two</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        </article>
-                        <article class="project-card">
-                            <h3>Project Three</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        </article>
-                        <article class="project-card">
-                            <h3>Project Four</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        </article>
-                        <article class="project-card">
-                            <h3>Project Five</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        </article>
-                        <article class="project-card">
-                            <h3>Project Six</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        </article>
-                    </div>
-                </section>
-
-                <!-- Announcements Section -->
-                <section class="announcements">
-                    <h2>Announcements</h2>
-                    <div class="announcements-list">
-                        <article class="announcement">
-                            <h4>Site Maintenance</h4>
-                            <p>Scheduled maintenance on Friday evening.</p>
-                        </article>
-                        <article class="announcement">
-                            <h4>New Features</h4>
-                            <p>Check out the latest updates available now.</p>
-                        </article>
-                        <article class="announcement">
-                            <h4>Community Event</h4>
-                            <p>Join us for a virtual meetup next week.</p>
-                        </article>
-                    </div>
-                </section>
-
-                <!-- Trending Section -->
-                <section class="trending">
-                    <h2>Trending</h2>
-                    <div class="trending-list">
-                        <div class="trend-item">
-                            <div class="trend-avatar">👤</div>
-                            <div class="trend-info">
-                                <p class="trend-name">@user1</p>
-                                <p class="trend-desc">Design Challenge</p>
-                            </div>
-                        </div>
-                        <div class="trend-item">
-                            <div class="trend-avatar">👤</div>
-                            <div class="trend-info">
-                                <p class="trend-name">@user2</p>
-                                <p class="trend-desc">Code Review</p>
-                            </div>
-                        </div>
-                        <div class="trend-item">
-                            <div class="trend-avatar">👤</div>
-                            <div class="trend-info">
-                                <p class="trend-name">@user3</p>
-                                <p class="trend-desc">New Portfolio</p>
-                            </div>
-                        </div>
-                        <div class="trend-item">
-                            <div class="trend-avatar">👤</div>
-                            <div class="trend-info">
-                                <p class="trend-name">@user4</p>
-                                <p class="trend-desc">Web Dev Tips</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </main>
-        </div>
+        <main>
+            <div id="libraryDisplay" class="library-grid"></div>
+        </main>
     </div>
+
+    <!-- Add Book Dialog -->
+    <dialog id="addBookDialog" class="dialog">
+        <div class="dialog-content">
+            <h2>Add New Book</h2>
+            <form id="bookForm">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <input type="text" id="author" name="author" required>
+                </div>
+                <div class="form-group">
+                    <label for="pages">Number of Pages</label>
+                    <input type="number" id="pages" name="pages" required min="1">
+                </div>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="read" name="read">
+                    <label for="read">I have read this book</label>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Add Book</button>
+                    <button type="button" id="closeDialog" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <script src="script.js"></script>
 </body>
 </html>
